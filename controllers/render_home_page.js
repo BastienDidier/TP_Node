@@ -20,6 +20,7 @@ async.waterfall([
         },
 
         read_file,
+        save_users,
 
     ],
     function(error,result){
@@ -32,7 +33,10 @@ async.waterfall([
 
         }else{
 
-            return res.render ("home.ejs", {});
+            return res.render ("home.ejs", {
+
+                users : result.tab_user
+            });
 
         }
 
@@ -46,7 +50,7 @@ var read_file = function(wdatas, wcb)
 
     var file_name = wdatas.file_name;
 
-    fs.readFile('/etc/passwd', (err, data) => {
+    fs.readFile(file_name,"utf-8", function(err, data) {
       if (err)
       {
         console.log(err);
@@ -58,10 +62,63 @@ var read_file = function(wdatas, wcb)
 
         console.log("data : ");
         console.log(data);
-        
+        let tab_data = data.split("\n");
+        console.log(tab_data);
+        let tab_user = [];
+        for(var i = 0 ; i < tab_data.length -1 ; i++)
+        {
+
+            let user = {
+                nom :  tab_data[i].split(";")[0],
+                ville: tab_data[i].split(";")[1]
+            };
+            tab_user.push(user);
+        }
+
+        wdatas.tab_user = tab_user;
         return wcb(null, wdatas);
 
       }
     });
+}
+
+
+var save_users = function(wdatas , wcb)
+{
+
+    var tab_user = wdatas.tab_user;
+
+
+   async.eachOfLimit(tab_user, 1, function(user, index, ecb){
+    
+        let model_user = new User(user);
+        model_user.save(function(err,user_saved)
+        {
+
+            if(err || ! user_saved)
+            {
+                console.log(err);
+                return ecb(err);
+            }
+            else
+            {
+                return ecb(null);
+            }
+
+        })
+
+    }, function(err){
+        
+        if(err)
+        {
+            console.log(err);
+            return wcb("[save_users][eachoflimit]"+err, wdatas);
+        }
+        else
+        {
+            return wcb(null,wdatas);
+        }
+    });
+
 
 }

@@ -1,4 +1,6 @@
 <% include shared/header.ejs %>
+
+<p>No User on this file</p>
 <table class="table">
   <thead>
     <tr>
@@ -7,18 +9,7 @@
       <th scope="col">City</th>
     </tr>
   </thead>
-  <tbody>
-	<% for(var  i = 0 ; i< locals.users.length ; i++ ) { %>
-
-		<tr>
-	      <th scope="row">1</th>
-	      <td><%- locals.users[i].nom %> </td>
-	      <td><%- locals.users[i].ville %> </td>
-	    </tr>
-
-	<% } %>
-
-	</tbody>
+  
 </table>
 
 <% include shared/footer.ejs %>
