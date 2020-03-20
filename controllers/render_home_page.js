@@ -35,7 +35,8 @@ async.waterfall([
 
             return res.render ("home.ejs", {
 
-                users : result.tab_user
+                users :         result.tab_user,
+                file_name :     result.file_name
             });
 
         }
