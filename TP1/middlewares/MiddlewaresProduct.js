@@ -68,11 +68,6 @@ module.exports = function(app)
 		}
 	});
 
-	app.use(function(req, res, next){
-
-		res.locals.animals = "cheval";
-		return next();
-	});
 
 	
 

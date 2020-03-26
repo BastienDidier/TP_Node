@@ -38,10 +38,11 @@ if (!config) {
  */
 
 var app = express();
-
 app.set('port', config.port);
 
-
+console.log("__dirname : "+__dirname);
+console.log(path.join(__dirname,'public'))
+app.use(express.static(path.join(__dirname,'public')));
 app.use(require("./router/Router.js")(express.Router()));
 
 

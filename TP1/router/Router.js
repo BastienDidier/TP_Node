@@ -5,11 +5,18 @@ module.exports = function (router) {
         console.log("Hello World");
         return res.status(200).json({error: true});
     });
-
+    router.get("/", function (req, res, next) {
+        console.log("Hello World");
+        return res.send("hello world");
+    });
+    
     router.post("*", function (req, res, next) {
 
         return res.status(500).json({error: true});
     });
+    router.get("*", function (req, res, next) {
 
+        return res.status(500).json({error: true});
+    });
     return router;
 };
