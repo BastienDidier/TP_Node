@@ -1,0 +1,212 @@
+<html lang="fr">
+<head>
+	<meta charset="utf-8">
+
+	<title>TP Node</title>
+	<meta name="author" content="Bastien Didier">
+  	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+<h5><%- locals.file_name %></h5>
+<h1>Add a city</h1>
+
+  <label for="city">city</label><br>
+  <input type="text" id="add_city" name="city"><br>
+<button id="add_btn">Add</button>
+<br>
+<br>
+<h1>Modify a city</h1>
+<label for="id">id</label><br>
+<input type="text" id="id" name="id"><br>
+<label for="ville">ville</label><br>
+<input type="text" id="ville" name="ville"><br>
+<button id="Modif">Modif city</button>
+<h5>list city</h5>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Id</th>
+      <th scope="col">ville</th>
+    </tr>
+  </thead>
+  <tbody id="tableList">
+  </tbody>
+</table>
+
+
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		$.ajax({
+			  type: "GET",
+			  url: "/cities",
+			  data: {},
+			  success: function(data, textStatus, jqXHR)
+			    {
+
+			    	var str = ""
+	       	 		var len = data.length;
+	       	 		var list_city = data;
+
+	       	 		for(var i = 0; i<len ; i++)
+	       	 		{
+	       	 			var index = i+1;
+	       	 			str += "<tr>";
+	       	 			str += "<th scope='row'>"+index+"</th>";
+	       	 			str += "<td>"+list_city[i]._id.toString()+"</td>";
+	       	 			str += "<td>"+list_city[i].ville+"</td>";
+
+	       	 		}
+
+       	 		$("#tableList").html(str);
+
+
+			    },
+			    error: function (jqXHR, textStatus, errorThrown)
+			    {
+
+					alert("error");
+
+			    },
+
+			});
+
+
+
+		$("#add_btn").click(function()
+		{
+			var ville = $("#add_city").val();
+			$.ajax({
+
+			  type: "POST",
+			  url: "http://localhost:9014/city",
+			  data: {city: ville},
+			  success: function(data, textStatus, jqXHR)
+			    {
+
+					alert("success");
+
+					$.ajax({
+					  type: "GET",
+					  url: "/cities",
+					  data: {},
+					  success: function(data, textStatus, jqXHR)
+					    {
+
+					    	var str = ""
+			       	 		var len = data.length;
+			       	 		var list_city = data;
+
+			       	 		for(var i = 0; i<len ; i++)
+			       	 		{
+			       	 			var index = i+1;
+			       	 			str += "<tr>";
+			       	 			str += "<th scope='row'>"+index+"</th>";
+			       	 			str += "<td>"+list_city[i]._id.toString()+"</td>";
+			       	 			str += "<td>"+list_city[i].ville+"</td>";
+
+			       	 		}
+
+		       	 		$("#tableList").html(str);
+
+
+					    },
+					    error: function (jqXHR, textStatus, errorThrown)
+					    {
+
+							alert("error");
+
+					    },
+
+					});
+
+
+			    },
+			    error: function (jqXHR, textStatus, errorThrown)
+			    {
+
+					alert("error");
+
+			    },
+
+			});
+
+		})
+		$("#Modif").click(function()
+		{
+
+			var id = $("#id").val();
+			var ville  = $("#ville").val();
+			$.ajax({
+			  type: "PUT",
+			  url: "http://localhost:9014/city/"+id+"?city="+ville,
+			  data: {},
+			  success: function(data, textStatus, jqXHR)
+			    {
+
+			    	alert("success");
+			    	$.ajax({
+					  type: "GET",
+					  url: "/cities",
+					  data: {},
+					  success: function(data, textStatus, jqXHR)
+					    {
+
+					    	var str = ""
+			       	 		var len = data.length;
+			       	 		var list_city = data;
+
+			       	 		for(var i = 0; i<len ; i++)
+			       	 		{
+			       	 			var index = i+1;
+			       	 			str += "<tr>";
+			       	 			str += "<th scope='row'>"+index+"</th>";
+			       	 			str += "<td>"+list_city[i]._id.toString()+"</td>";
+			       	 			str += "<td>"+list_city[i].ville+"</td>";
+
+			       	 		}
+
+		       	 		$("#tableList").html(str);
+
+
+					    },
+					    error: function (jqXHR, textStatus, errorThrown)
+					    {
+
+							alert("error");
+
+					    },
+
+					});
+
+
+			    },
+			    error: function (jqXHR, textStatus, errorThrown)
+			    {
+
+					alert("error");
+
+			    },
+
+			});
+
+		})
+
+
+	})
+
+</script>
+
+</body>
+</html>
