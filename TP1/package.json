@@ -22,7 +22,7 @@
     "express-session": "^1.17.0",
     "express-validator": "2.20.5",
     "file-system": "2.2.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "method-override": "2.3.6",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.14",
